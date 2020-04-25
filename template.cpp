@@ -1,5 +1,33 @@
-#include <iostream>
+#include <bits/stdc++.h>
+#define ll long long int
+#define pll pair<ll, ll> 
+#define pii pair<int, int> 
+#define ff first
+#define ss second
+
 using namespace std;
+
+ll MOD = 998244353;
+
+ll pwr(ll x, ll y) {
+	ll res = 1;
+	x = x%MOD;
+	while (y > 0) {
+		if (y&1) res = (res*x)%MOD;
+
+		y = y>>1;
+		x = (x*x)%MOD;
+	}
+	return res;
+}
+
+inline ll addmod(ll a, ll b){
+	return ((a+b)%MOD);
+}
+
+inline ll mulmod(ll a, ll b){
+	return ((a*b)%MOD);
+}
 
 class BIT {
 	int *bit;
@@ -41,12 +69,3 @@ public:
 		update(x+1, val-getValue(x));
 	}
 };
-
-int main() {
-	int ar[6] = {5, 1, 7, 3, -4, 6};
-	BIT b(ar, 6);
-	b.changeElem(4, 4);
-	for (int i=0; i < 6; i++) cout << b.getSum(i) << endl;
-
-	return 0;
-}
