@@ -70,19 +70,22 @@ public:
 	}
 };
 
-int bsh(int val, int ar[]) {		// return ind such that val >= ar[ind] and val < ar[ind+1]
-	int a = 0, b = sizeof(ar)/sizeof(ar[0]) - 1, c = (a+b)/2;
-	if (val < ar[0]) return -1;
-	if (val >= ar[b]) return b;
+int main () {
+	int t; cin >> t;
 
-	while (!(val >= ar[c] && val < ar[c+1])) {
-		if (val < ar[c]) b = c;
-		else {
-			if (b-a == 1 && c == a) a = b;
-			else a = c;
+	while (t--) {
+		ll n, k;
+		cin >> n >> k;
+
+		ll i = 2;
+		bool found = false;
+		for (; i <= sqrt(n); i++) {
+			if (n%i == 0) {
+				found = true;
+				break;
+			}
 		}
-		c = (a+b)/2;
+		if (!found) i = n;
+		cout << n + i + 2*(k-1) << endl;
 	}
-	return c;
 }
-

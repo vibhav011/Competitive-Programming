@@ -70,15 +70,13 @@ public:
 	}
 };
 
-int bsh(int val, int ar[]) {		// return ind such that val >= ar[ind] and val < ar[ind+1]
-	int a = 0, b = sizeof(ar)/sizeof(ar[0]) - 1, c = (a+b)/2;
-	if (val < ar[0]) return -1;
-	if (val >= ar[b]) return b;
+int bsh(int n) {
+	ll a = 1, b = sqrt(n), c = (a+b)/2;
 
-	while (!(val >= ar[c] && val < ar[c+1])) {
-		if (val < ar[c]) b = c;
+	while (!(c*(3*c+1)/2 <= n && (c+1)*(3*c+4)/2 > n)) {
+		if (c*(3*c+1)/2 > n) b = c;
 		else {
-			if (b-a == 1 && c == a) a = b;
+			if (a == c && b-a == 1) a = c+1;
 			else a = c;
 		}
 		c = (a+b)/2;
@@ -86,3 +84,22 @@ int bsh(int val, int ar[]) {		// return ind such that val >= ar[ind] and val < a
 	return c;
 }
 
+int main() {
+	int t; cin >> t;
+	while (t--) {
+		int n; cin >> n;
+
+		int a[n];
+
+		for (int i = 0; i < n; i++) {
+			cin >> a[i];
+		}
+		set <int> rem;
+
+		for (int k = 0; k < n; k++) {
+			rem.insert((k + n + a[k]%n)%n);
+		}
+		if (rem.size() == n) cout << "YES\n";
+		else cout << "NO\n";
+	}
+}

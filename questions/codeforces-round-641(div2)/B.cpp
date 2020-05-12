@@ -70,19 +70,39 @@ public:
 	}
 };
 
-int bsh(int val, int ar[]) {		// return ind such that val >= ar[ind] and val < ar[ind+1]
-	int a = 0, b = sizeof(ar)/sizeof(ar[0]) - 1, c = (a+b)/2;
-	if (val < ar[0]) return -1;
-	if (val >= ar[b]) return b;
+int dp[100005];
+int s[100005];
+int n;
 
-	while (!(val >= ar[c] && val < ar[c+1])) {
-		if (val < ar[c]) b = c;
-		else {
-			if (b-a == 1 && c == a) a = b;
-			else a = c;
-		}
-		c = (a+b)/2;
+int ans (int ind) {
+	if (dp[ind] != -1) return dp[ind];
+
+	int mx = 0;
+
+	for (int i = 2; ind * i <= n; i++) {
+		if (s[ind*i] > s[ind]) mx = max(mx, ans(ind * i));
 	}
-	return c;
+
+	dp[ind] = 1+mx;
+	return dp[ind];
 }
 
+int main () {
+	int t; cin >> t;
+
+	while (t--) {
+		cin >> n;
+		for (int i = 1; i <= n; i++) cin >> s[i];
+
+		fill(dp, dp+100005, -1);
+
+		int mx = 1;
+
+		for (int i = 1; i <= n; i++) {
+			mx = max(mx, ans(i));
+		}
+
+		cout << mx << endl;
+
+	}
+}
