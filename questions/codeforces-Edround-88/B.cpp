@@ -93,5 +93,32 @@ int main () {
 
 	int t; cin >> t;
 	
-}
+	while (t--) {
+		ll n, m, x, y;
+		cin >> n >> m >> x >> y;
+		
+		vector<ll> a[n];
 
+		for (int i = 0; i < n; i++) {
+			ll cur = 0;
+			for (int j = 0; j < m; j++) {
+				char c; cin >> c;
+				if (c == '*') {
+					if (cur) a[i].pb(cur);
+					cur = 0;
+				}
+				else cur++;
+				if (j == m-1 && cur) a[i].pb(cur);
+			}
+		}
+		y = min(y, 2*x);
+		ll cost = 0;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < a[i].size(); j++) {
+				//cout << a[i][j] << endl;
+				cost += y*(a[i][j]/2) + x*(a[i][j]%2);
+			}
+		}
+		cout << cost << endl;
+	}
+}

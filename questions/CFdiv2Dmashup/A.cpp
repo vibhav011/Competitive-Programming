@@ -88,10 +88,47 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 	return c;
 }
 
+int a[5005][5005], dp[5005][5005], msort[5005];
+int n, m;
+
+void mySort(int ar[]) {
+	fill(msort, msort+m+1, 0);
+	for (int i = 1; i <= n; i++) msort[ar[i]]++;
+	
+	int ind = 1;
+	for (int i = 0; i <= m && ind <= n; i++) {
+		while (msort[i]--)
+			ar[ind++] = i;
+	}
+}
+
 int main () {
 	ios_base::sync_with_stdio(0); cin.tie(0);
+	cin >> n >> m;
 
-	int t; cin >> t;
+	for (int i = 1; i <= n; i++) for (int j = 1; j <= m; j++) {
+		char c; cin >> c;
+		a[i][j] = c - '0';
+	}
 	
+	for (int i = 1; i <= n; i++) {
+		for (int j = m; j > 0; j--) {
+			if (j == m && a[i][j]) dp[j][i] = 1;
+			else {
+				if (a[i][j]) dp[j][i] = 1+dp[j+1][i];
+				else dp[j][i] = 0; 
+			}
+		}
+	}
+	
+	for (int i = 1; i <= m; i++) mySort(dp[i]);
+
+	int ans = 0;
+	
+	for (int i = 1; i <= m; i++) {
+		for (int j = 1; j <= n; j++) ans = max(ans, dp[i][j]*(n-j+1));
+	}
+
+	cout << ans << endl;
 }
 

@@ -91,7 +91,18 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 int main () {
 	ios_base::sync_with_stdio(0); cin.tie(0);
 
-	int t; cin >> t;
+	ll r, g, b;
+	cin >> r >> g >> b;
+	ll x = min(r, min(g, b));
+	ll z = max(r, max(g, b));
+	ll y = r+g+b-x-z;
+	ll ans;
+
+	if (2*(x+y) <= z) ans = x+y;
+	else ans = (x+y+z)/3;
 	
+	cout << ans << endl;
+
+	return 0;
 }
 

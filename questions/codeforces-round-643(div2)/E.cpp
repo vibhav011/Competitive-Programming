@@ -1,3 +1,5 @@
+// Wrong
+
 #include <bits/stdc++.h>
 #define ll long long int
 #define pll pair<ll, ll> 
@@ -72,26 +74,45 @@ public:
 	}
 };
 
-int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and val < ar[ind+1]
-	int a = 0, b = n - 1, c = (a+b)/2;
-	if (val < ar[0]) return -1;
-	if (val >= ar[b]) return b;
-
-	while (!(val >= ar[c] && val < ar[c+1])) {
-		if (val < ar[c]) b = c;
-		else {
-			if (b-a == 1 && c == a) a = b;
-			else a = c;
-		}
-		c = (a+b)/2;
-	}
-	return c;
-}
-
 int main () {
-	ios_base::sync_with_stdio(0); cin.tie(0);
+	ll n, a, r, m, sum;
+	cin >> n >> a >> r >> m;
+	m = min(m, a+r);
+	ll h[n];
+	for (int i = 0; i < n; i++) {
+		cin >> h[i];
+		sum += h[i];
+	}
 
-	int t; cin >> t;
-	
+	ll low = (sum/n)*n;
+
+	ll ans1 = 0;
+	ans1 += a*(low+n-sum);
+	ll dif = low+n-sum;
+	for (int i = 0; i < n; i++) {
+		if (dif == 0) break;
+		if (h[i] < low+n) {
+			ll ad = min(low+n-h[i], dif);
+			h[i] += ad;
+			dif -= ad;
+		}
+	}
+	for (int i = 0; i < n; i++) {
+		if (h[i] < low+n) ans1 += m*(low+n-h[i]);
+	}
+	ll ans2 = 0;
+	ans2 += r*(sum-low);
+	dif = sum-low;
+	for (int i = 0; i < n; i++) {
+		if (dif == 0) break;
+		if (h[i] > low) {
+			ll sub = min(h[i]-low, dif);
+			h[i] -= sub;
+			dif -= sub;
+		}
+	}
+	for (int i = 0; i < n; i++) {
+		if (h[i] < low) ans2 += m*(low-h[i]);
+	}
+	cout << min(ans1, ans2) << endl;
 }
-

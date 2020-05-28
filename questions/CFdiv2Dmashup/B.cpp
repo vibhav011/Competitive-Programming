@@ -91,7 +91,31 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 int main () {
 	ios_base::sync_with_stdio(0); cin.tie(0);
 
-	int t; cin >> t;
-	
+	int n, m;
+	cin >> n >> m;
+
+	int dp[n+1][m+1];
+	memset(dp, 0, sizeof(dp));
+
+	int ar[n];
+
+	for (int i = 0; i < n; i++) {
+		cin >> ar[i];
+		double x; cin >> x;
+	}
+	dp[0][ar[0]] = 1;
+	for (int i = 1; i < n; i++) {
+		for (int j = 1; j <= m; j++) {
+			if (ar[i] == j) {
+				int mx = 0;
+				for (int k = 1; k <= j; k++) mx = max(mx, dp[i-1][k]);
+				dp[i][j] = mx+1;
+			}
+			else dp[i][j] = dp[i-1][j];
+		}
+	}
+	int ans = 0;
+	for (int k = 1; k <= m; k++) ans = max(ans, dp[n-1][k]);
+	cout << n-ans << endl;
 }
 

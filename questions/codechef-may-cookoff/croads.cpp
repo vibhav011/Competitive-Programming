@@ -92,6 +92,24 @@ int main () {
 	ios_base::sync_with_stdio(0); cin.tie(0);
 
 	int t; cin >> t;
-	
-}
+	while (t--) {
+		ll n; cin >> n;
 
+		if (!(n&(n-1))) {
+			cout << "-1\n";
+			continue;
+		}
+		ll cost = -1, n2 = n;
+		int pwr = 0;
+		while ((1 << pwr) < n2) {
+			n = n2/(1 << pwr);
+			
+			ll r = (n-1)/2 + 1;
+			//cout << r << endl;
+			//if (pwr && n * ((ll)1 << pwr))
+			cost += r * ((ll)1 << pwr);
+			pwr++;
+		}
+		cout << cost << endl;
+	}
+}

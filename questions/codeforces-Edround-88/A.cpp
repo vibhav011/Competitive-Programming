@@ -93,5 +93,18 @@ int main () {
 
 	int t; cin >> t;
 	
+	while (t--) {
+		int n, m, k;
+		cin >> n >> m >> k;
+		if (m <= n/k) {
+			cout << m << endl;
+			continue;
+		}
+		if ((m-n/k)%(k-1) == 0) {
+			cout << n/k - (m-n/k)/(k-1) << endl;
+		}
+		else {
+			cout << n/k - (m-n/k)/(k-1) - 1 << endl;
+		}
+	}
 }
-

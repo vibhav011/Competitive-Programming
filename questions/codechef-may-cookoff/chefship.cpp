@@ -88,10 +88,40 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 	return c;
 }
 
+vector<int> z_function(string s) {
+	int l = 0, r = 0;
+	int n = s.size();
+	vector<int> z(n);
+	for (int i = 1; i < n; i++) {
+		if (i <= r)
+			z[i] = min (r - i + 1, z[i - l]);
+		while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+			z[i]++;
+		if (i + z[i] - 1 > r)
+			l = i, r = i + z[i] - 1;
+	}
+	return z;
+}
+
 int main () {
 	ios_base::sync_with_stdio(0); cin.tie(0);
 
 	int t; cin >> t;
-	
+	while (t--) {
+		string s; cin >> s;
+		int n = s.size();
+		if (n%2) {
+			cout << "0\n";
+			continue;
+		}
+		vector<int> z1 = z_function(s);
+		reverse(s.begin(), s.end());
+		vector<int> z2 = z_function(s);
+		
+		int ans = 0;
+		for (int i = 1; i < n/2; i++) {
+			if (i <= z1[i] && n/2-i <= z2[n/2-i]) ans++;
+		}
+		cout << ans << endl;
+	}
 }
-

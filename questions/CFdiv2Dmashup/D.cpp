@@ -91,7 +91,49 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 int main () {
 	ios_base::sync_with_stdio(0); cin.tie(0);
 
-	int t; cin >> t;
+	int r, c; cin >> r >> c;
+	int a[r][c];
+	pii e, s;
+	vector<pair<pii, int> > bred;
+
+	for (int i = 0; i < r; i++) {
+		for (int j = 0; j < c; j++) {
+			char c; cin >> c;
+			a[i][j] = -2;
+			if (c == 'E') {
+				e = mp(i, j);
+				a[i][j] = 0;
+			}
+			else if (c == 'S') s = mp(i, j);
+			else if (c == 'T') a[i][j] = -3;
+			else if (c - '0' > 0) bred.pb(mp(mp(i, j), c-'0'));
+		}
+	}
+	int ar[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+	queue<pii> Q;
+	Q.push(e);
+
+	while (!Q.empty()) {
+		pii u = Q.front();
+		Q.pop();
+		for (int i = 0; i < 4; i++) {
+			int nx = u.ff + ar[i][0], ny = u.ss + ar[i][1];
+			if (nx > -1 && nx < r && ny > -1 && ny < c) {
+				if (a[nx][ny] == -2) {
+					a[nx][ny] = a[u.ff][u.ss] + 1;
+					Q.push(mp(nx, ny));
+				}
+			}
+		}
+	}
 	
+	int len = a[s.ff][s.ss];
+	int ans = 0;
+	for (int i = 0; i < bred.size(); i++) {
+		if (a[bred[i].ff.ff][bred[i].ff.ss] <= len && a[bred[i].ff.ff][bred[i].ff.ss] > 0) ans += bred[i].ss;
+	}
+	cout << ans << endl;
+
+	return 0;
 }
 

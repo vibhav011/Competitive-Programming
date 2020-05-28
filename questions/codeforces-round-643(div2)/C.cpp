@@ -72,26 +72,21 @@ public:
 	}
 };
 
-int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and val < ar[ind+1]
-	int a = 0, b = n - 1, c = (a+b)/2;
-	if (val < ar[0]) return -1;
-	if (val >= ar[b]) return b;
-
-	while (!(val >= ar[c] && val < ar[c+1])) {
-		if (val < ar[c]) b = c;
-		else {
-			if (b-a == 1 && c == a) a = b;
-			else a = c;
-		}
-		c = (a+b)/2;
-	}
-	return c;
-}
-
 int main () {
-	ios_base::sync_with_stdio(0); cin.tie(0);
-
-	int t; cin >> t;
-	
+	ll a, b, c, d;
+	cin >> a >> b >> c >> d;
+	ll ans = 0;
+	for (ll x = b; x >= a; x--) {
+		ll y1 = max(c+1-x, b);
+		if (y1 > c) break;
+		ll start = min(x + y1 - c, d-c+1);
+		//c - y1 + 1;
+		if (start + c - y1 > d-c+1) {
+			ans += (d-c+1 + start)*(d-c - start + 2)/2 + (d-c+1)*(2*c-y1-d-1 +start); 
+		}
+		else {
+			ans += (start*(c - y1 + 1) + (c-y1)*(c - y1 + 1)/2);
+		}
+	}
+	cout << ans << endl;
 }
-

@@ -91,7 +91,26 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 int main () {
 	ios_base::sync_with_stdio(0); cin.tie(0);
 
-	int t; cin >> t;
+	int T; cin >> T;
 	
-}
+	while (T--) {
+		ll h, c, t;
+		cin >> h >> c >> t;
+		if (2*t <= h+c) {
+			cout << "2\n";
+			continue;
+		}
+		//double dif = h-t;
+		ll k = (t-c)/(2*t - h - c); //(1 + (h-c)/(h - c - 2*dif))/2;
+		double dif1 = abs((k*h + (k-1.0)*c)/(2*k-1.0) - t);
+		double dif2 = abs(((k+1.0)*h + k*c)/(2*k+1.0) - t);
 
+		if (min(dif1, dif2) >= (t - (h+c+0.0)/2)) {
+			cout << "2\n";
+		}
+		else if (dif2 < dif1) {
+			cout << 2*k+1 << endl;
+		}
+		else cout << 2*k-1 << endl;
+	}
+}

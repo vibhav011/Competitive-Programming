@@ -71,27 +71,39 @@ public:
 		update(x+1, val-getValue(x));
 	}
 };
+const int MAX = 2e5+5;
+int n, a[MAX], minn[MAX];
 
-int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and val < ar[ind+1]
-	int a = 0, b = n - 1, c = (a+b)/2;
-	if (val < ar[0]) return -1;
-	if (val >= ar[b]) return b;
+int bsh(int val, int ind) {
+	int a = ind, b = n - 1, c = (a+b)/2;
+	if (val == minn[ind]) return -1;
+	if (val > minn[n-1]) return n-ind-2;
 
-	while (!(val >= ar[c] && val < ar[c+1])) {
-		if (val < ar[c]) b = c;
+	while (!(val > minn[c] && val <= minn[c+1])) {
+		if (val <= minn[c]) b = c;
 		else {
 			if (b-a == 1 && c == a) a = b;
 			else a = c;
 		}
 		c = (a+b)/2;
 	}
-	return c;
+	return c-ind-1;
 }
 
 int main () {
 	ios_base::sync_with_stdio(0); cin.tie(0);
 
-	int t; cin >> t;
-	
+	cin >> n;
+	for (int i = 0; i < n; i++) cin >> a[i];
+
+	minn[n-1] = a[n-1];
+	for (int i = n-2; i > 0; i--) minn[i] = min(minn[i+1], a[i]);
+
+	for (int i = 0; i < n; i++) {
+		cout << bsh(a[i], i) << ' ';
+	}
+	cout << endl;
+
+	return 0;
 }
 

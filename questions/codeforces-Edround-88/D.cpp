@@ -91,7 +91,31 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 int main () {
 	ios_base::sync_with_stdio(0); cin.tie(0);
 
-	int t; cin >> t;
-	
-}
+	int n; cin >> n;
 
+	int a[n+5];
+	for (int i = 0; i < n; i++) cin >> a[i+1];
+	int dp[n+5][2];
+	dp[n][0] = dp[n][1] = a[n];
+	for (int i = n-1; i > 0; i--) {
+		if (a[i] < 0 || dp[i+1][1] < 0) {
+			dp[i][0] = dp[i][1] = a[i];
+		}
+		else {
+			if (dp[i+1][1] >= a[i]) {
+				dp[i][1] = dp[i+1][1];
+				dp[i][0] = dp[i+1][0] + a[i];
+			}
+			else {
+				dp[i][1] = a[i];
+				dp[i][0] = dp[i+1][0] + a[i];
+			}
+		}
+	}
+	int ans = 0;
+	for (int i = 1; i <= n; i++) {
+		printf("(%d, %d) ", dp[i][0], dp[i][1]);
+		ans = max(ans, dp[i][0] - dp[i][1]);
+	}
+	cout << endl << ans << endl;
+}

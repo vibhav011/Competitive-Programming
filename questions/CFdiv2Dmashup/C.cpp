@@ -87,11 +87,57 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 	}
 	return c;
 }
+ll doDP(int);
+ll doDP2(int);
+
+const int MAX = 2e5+5;
+
+ll n, dp[MAX][2], ar[MAX];
+
+ll doDP (int k) {
+	if (dp[k][0] > -2) return dp[k][0];
+	if (dp[k][0] == -3 || k+ar[k] == 1) {
+		dp[k][0] = -1;
+	}
+	else {
+		dp[k][0] = -3;
+		if (k + ar[k] > n) dp[k][0] = ar[k];
+		else {
+			dp[k][0] = doDP2(k + ar[k]);
+			if (dp[k][0] != -1) dp[k][0] += ar[k];
+		}
+	}
+	return dp[k][0];
+}
+ll doDP2 (int k) {
+	if (dp[k][1] > -2) return dp[k][1];
+	if (dp[k][1] == -3 || k-ar[k] == 1) {
+		dp[k][1] = -1;
+	}
+	else {
+		dp[k][1] = -3;
+		if (k - ar[k] < 1) dp[k][1] = ar[k];
+		else {
+			dp[k][1] = doDP(k - ar[k]);
+			if (dp[k][1] != -1) dp[k][1] += ar[k];
+		}
+	}
+	return dp[k][1];
+}
 
 int main () {
 	ios_base::sync_with_stdio(0); cin.tie(0);
 
-	int t; cin >> t;
-	
+	cin >> n;
+	for (int i = 2; i <= n; i++) cin >> ar[i];
+
+	for (int i = 1; i <= n; i++) {
+		dp[i][0] = dp[i][1] = -2;
+	}
+
+	for (int i = 1; i < n; i++) {
+		if (doDP2(i+1)+1) cout << doDP2(i+1)+i << endl;
+		else cout << -1 << endl;
+	}
 }
 
