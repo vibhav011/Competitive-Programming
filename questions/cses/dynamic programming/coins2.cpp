@@ -8,23 +8,22 @@ int main () {
 	int n, x;
 	cin >> n >> x;
 
-	int ans[x+1];
+	vector<vector<int> > ans(x+1, vector<int>(n));
 	int c[n];
 	
-	// fill(ans, ans+x+1, -1);
-	ans[0] = 1;
-
-	for (int i = 0; i < n; i++) cin >> c[i];
+	for (int i = 0; i < n; i++) {
+		cin >> c[i];
+		ans[0][i] = 1;
+	}
 	sort(c, c+n);
 	
 	for (int i = 1; i <= x; i++) {
-		ans[i] = 0;
 		for (int j = 0; j < n; j++) {
-			if (c[j] > i) break;
-			// ans[i] = addmod(ans[i], ans[i-c[j]]);
-			(ans[i] += ans[i-c[j]]) %= MOD;
+			if (j > 0) ans[i][j] = ans[i][j-1];
+			if (c[j] > i) continue;
+			(ans[i][j] += ans[i-c[j]][j]) %= MOD;
 		}
 	}
 	
-	cout << ans[x] << endl;
+	cout << ans[x][n-1] << endl;
 }
