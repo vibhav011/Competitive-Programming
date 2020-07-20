@@ -1,65 +1,25 @@
 #include <bits/stdc++.h>
-#define ll long long int
-#define pll pair<ll, ll> 
-#define pii pair<int, int> 
-#define ff first
-#define ss second
-#define mp make_pair
-#define pb push_back
-
 using namespace std;
-
-ll MOD = 1e9+7;
-
-ll pwr(ll x, ll y) {
-	ll res = 1;
-	x = x%MOD;
-	while (y > 0) {
-		if (y&1) res = (res*x)%MOD;
-
-		y = y>>1;
-		x = (x*x)%MOD;
-	}
-	return res;
-}
-
-inline ll addmod(ll a, ll b){
-	return ((a+b)%MOD);
-}
-
-inline ll mulmod(ll a, ll b){
-	return ((a*b)%MOD);
-}
-
-int ans[100001];
-int h[1000], s[1000], n, x;
-bool aval[1000];
-
-int calc (int k) {
-	if (ans[k] != -1) return ans[k];
-	ans[k] = ans[k-1];
-	for (int j = 0; j < n; j++) {
-		if (k >= h[j] && aval[j]) {
-			aval[j] = false;
-			ans[k] = max(ans[k], s[j]+calc(k-h[j]));
-			aval[j] = true;
-		}
-	}
-	return ans[k];
-}
 
 int main () {
 	ios_base::sync_with_stdio(0); cin.tie(0);
 
+	int n, x;
 	cin >> n >> x;
 	
-	fill(ans, ans+x+1, -1);
-	ans[0] = 0;
-	for (int i = 0; i < n; i++) cin >> h[i];
-	for (int i = 0; i < n; i++) cin >> s[i];
+	vector<vector<int> > ans(n+1, vector<int>(x+1));
+	int h[n+1], s[n+1];
+	for (int i = 1; i <= n; i++) cin >> h[i];
+	for (int i = 1; i <= n; i++) cin >> s[i];
 	
-	memset(aval, true, sizeof(aval));
-	
-	cout << calc(x) << endl;
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= x; j++) {
+			ans[i][j] = ans[i-1][j];
+			if (j < h[i]) continue;
+			ans[i][j] = max(ans[i][j], s[i] + ans[i-1][j-h[i]]);
+		}
+	}
+	cout << ans[n][x] << endl;
+
 }
 
