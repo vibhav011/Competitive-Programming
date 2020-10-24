@@ -89,7 +89,7 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 }
 
 int main () {
-	ios_base::sync_with_stdio(0); cin.tie(0);
+	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
 	int t; cin >> t;
 	
