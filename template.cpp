@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
-#define ll long long int
-#define pll pair<ll, ll> 
-#define pii pair<int, int> 
+#define ll long long
+#define int ll
+#define pii pair<ll, ll> 
 #define ff first
 #define ss second
 #define mp make_pair
@@ -11,14 +11,14 @@ using namespace std;
 
 ll MOD = 998244353;
 
-ll pwr(ll x, ll y) {
+ll pwr(ll x, ll y, ll mod = MOD) {
 	ll res = 1;
-	x = x%MOD;
+	x = x%mod;
 	while (y > 0) {
-		if (y&1) res = (res*x)%MOD;
+		if (y&1) res = (res*x)%mod;
 
 		y = y>>1;
-		x = (x*x)%MOD;
+		x = (x*x)%mod;
 	}
 	return res;
 }
@@ -31,67 +31,87 @@ inline ll mulmod(ll a, ll b){
 	return ((a*b)%MOD);
 }
 
-class BIT {
-	int *bit;
-	int N;
-
-public:
-	void update(int x, int val) {
-		int ind = x;
-		while (ind <= N) {
-			bit[ind] += val;
-			ind += (ind & (-ind));
-		}
+bool check_composite(int n, int a, int d, int s) {
+	int x = pwr(a, d, n);
+	if (x == 1 || x == n - 1)
+		return false;
+	for (int r = 1; r < s; r++) {
+		x = x * x % n;
+		if (x == n - 1)
+			return false;
 	}
-
-	BIT(int ar[], int n) {
-		bit = new int[n+1];
-		N = n+1;
-		for (int i = 1; i < N; i++) bit[i] = 0;
-		for (int i = 1; i < N; i++) update(i, ar[i-1]);
-	}
-
-	int getSum(int x) {
-		if (x < 0) return 0;
-
-		int ind = x+1;
-		int sum = 0;
-		while (ind > 0) {
-			sum += bit[ind];
-			ind = (ind & (ind-1));
-		}
-		return sum;
-	}
-
-	int getValue(int x) {
-		return getSum(x) - getSum(x-1);
-	}
-
-	void changeElem(int x, int val) {
-		update(x+1, val-getValue(x));
-	}
+	return true;
 };
 
-int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and val < ar[ind+1]
-	int a = 0, b = n - 1, c = (a+b)/2;
-	if (val < ar[0]) return -1;
-	if (val >= ar[b]) return b;
+const int first12prime[12] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37};
 
-	while (!(val >= ar[c] && val < ar[c+1])) {
-		if (val < ar[c]) b = c;
-		else {
-			if (b-a == 1 && c == a) a = b;
-			else a = c;
-		}
-		c = (a+b)/2;
+bool isPrime(int n) {			// O(log n) time complexity
+	if (n < 2)
+		return false;
+
+	int r = 0;
+	int d = n - 1;
+	while ((d & 1) == 0) {
+		d >>= 1;
+		r++;
 	}
-	return c;
+
+	for (int i = 0; i < 12; i++) {
+		int a = first12prime[i];
+		if (n == a)
+			return true;
+
+		if (check_composite(n, a, d, r))
+			return false;
+	}
+	return true;
 }
 
-int main () {
+const int PM = 2e5+5;
+
+vector<int> primes;
+vector<bool> is_comp;
+
+void sieve () {
+	is_comp.resize(PM, false);
+	for (int i = 2; i < PM; i++) {
+		if (!is_comp[i]) primes.pb(i);
+		for (int j = 0; j < primes.size() && primes[j]*i < PM; j++) {
+			is_comp[primes[j]*i] = true;
+			if (i % primes[j] == 0) break;
+		}
+	}
+}
+
+inline int sfunc(int a, int b) {
+	return a+b;
+}
+
+int n;									// array size
+int *stree;								// stree = new int[2 * n]
+
+void build() {							// build the tree
+	for (int i = n - 1; i > 0; --i) stree[i] = sfunc(stree[i<<1], stree[i<<1|1]);
+}
+
+void modify(int p, int value) {			// set value at position p
+	for (stree[p += n] = value; p > 1; p >>= 1) stree[p>>1] = sfunc(stree[p], stree[p^1]);
+}
+
+int query(int l, int r) {				// query on interval [l, r)
+	int res = 0;						// DEFAULT
+	for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
+		if (l&1) res = sfunc(res, stree[l++]);
+		if (r&1) res = sfunc(res, stree[--r]);
+	}
+	return res;
+}
+
+signed main () {
 	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
 	int t; cin >> t;
 	
+	while (t--) {}
 }
 
