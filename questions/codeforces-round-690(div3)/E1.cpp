@@ -88,54 +88,42 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 	return c;
 }
 
+ll C(ll n, ll k) {
+	if (k > n) return 0;
+	ll ans = n;
+	for (int i = 0; i < k-1; i++) ans *= n-i-1;
+	for (int i = 0; i < k; i++) ans /= i+1;
+	return ans;
+}
+
 int main () {
 	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
-	ll k, l, r, t, x, y;
-	cin >> k >> l >> r >> t >> x >> y;
-	if (k-x < l && k+y > r) {
-		cout << "No\n";
-		return 0;
-	}
-	if (x == y) {
-		cout << "Yes\n";
-	}
-	else if (y < x) {
-		ll num = 0;
-		if (k+y > r) {
-			k -= x;
-			num = 1;
+	int t; cin >> t;
+
+	while (t--) {
+
+		int n; cin >> n;
+		vector<ll> freq(n+1);
+
+		for (int i = 0; i < n; i++) {
+			int x; cin >> x;
+			freq[x]++;
 		}
-		num += (k-l)/(x-y);
-		if (t > num) cout << "No\n";
-		else cout << "Yes\n";
-	}
-	else {
-		if (x+y <= r-l+1) cout << "Yes\n";
-		else {
-			ll num = 0;
-			ll jp = r-y;
-			ll times = y/x;
-			ll rem = y%x;
-			if (k+y > r) {
-				num = (k-l)/x;
-				k -= num * x;
-			}
-			if (k+y <= r) {
-				if (rem) {
-					ll ini = (jp-k)/rem;
-					num += ini*times;
-					k += ini*rem;
-					if (k + rem - x < l) num += times;
-					else num += (k+rem - (l+x))/(x-rem)*(times+1) + times;
-				}
-				else t = -1;
-			}
-			cout << num << endl;
-			if (num >= t) cout << "Yes\n";
-			else cout << "No\n";
+		ll ans = 0;
+		for (int i = 1; i <= n; i++) {
+			ans += C(freq[i], 3);
 		}
+		for (int i = 1; i <= n; i++) {
+			if (i-2 > 0) ans += freq[i] * C(freq[i-2], 2);
+			if (i-1 > 0) ans += freq[i] * C(freq[i-1], 2);
+			if (i+1 <= n) ans += freq[i] * C(freq[i+1], 2);
+			if (i+2 <= n) ans += freq[i] * C(freq[i+2], 2);
+		}
+		for (int i = 1; i <= n-2; i++) {
+			ans += freq[i] * freq[i+1] * freq[i+2];
+		}
+		cout << ans << endl;
 	}
-	
 }
 

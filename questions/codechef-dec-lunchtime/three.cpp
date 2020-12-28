@@ -91,50 +91,35 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 int main () {
 	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
-	ll k, l, r, t, x, y;
-	cin >> k >> l >> r >> t >> x >> y;
-	if (k-x < l && k+y > r) {
-		cout << "No\n";
-		return 0;
-	}
-	if (x == y) {
-		cout << "Yes\n";
-	}
-	else if (y < x) {
-		ll num = 0;
-		if (k+y > r) {
-			k -= x;
-			num = 1;
+	int t; cin >> t;
+
+	while (t--) {
+		string s;
+		cin >> s;
+		int n = s.size();
+		int mx = 0;
+		vector<int> freq(26);
+		for (int i = 0; i < n; i++) mx = max(mx, ++freq[s[i]-'a']);
+		int cnt[3] = {0, 0, 0};
+		int ans = 0;
+		int x = 0;
+		for (int i = 0; i < 26; i++) {
+			if (freq[i] == 1) x++;
+			// ans += freq[i]/3;
+			// if (freq[i] > 1 && freq[i]%3 == 1) x++;
+			// freq[i] = freq[i]%3;
+			// cnt[freq[i]]++;
 		}
-		num += (k-l)/(x-y);
-		if (t > num) cout << "No\n";
-		else cout << "Yes\n";
-	}
-	else {
-		if (x+y <= r-l+1) cout << "Yes\n";
-		else {
-			ll num = 0;
-			ll jp = r-y;
-			ll times = y/x;
-			ll rem = y%x;
-			if (k+y > r) {
-				num = (k-l)/x;
-				k -= num * x;
-			}
-			if (k+y <= r) {
-				if (rem) {
-					ll ini = (jp-k)/rem;
-					num += ini*times;
-					k += ini*rem;
-					if (k + rem - x < l) num += times;
-					else num += (k+rem - (l+x))/(x-rem)*(times+1) + times;
-				}
-				else t = -1;
-			}
-			cout << num << endl;
-			if (num >= t) cout << "Yes\n";
-			else cout << "No\n";
-		}
+		// if (cnt[2] >= cnt[1]) {
+		// 	cout << n/3 << endl;
+		// }
+		// else {
+		// 	int y = cnt[1]-cnt[2];
+		// 	cout << ans + cnt[2] + 3*min(x, y/3) << endl;
+		// }
+		if (3*x > n) cout << (n - x + (n-x)/2)/3 << endl;
+		else cout << n/3 << endl;
+		
 	}
 	
 }

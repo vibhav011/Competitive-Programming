@@ -91,50 +91,42 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 int main () {
 	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
-	ll k, l, r, t, x, y;
-	cin >> k >> l >> r >> t >> x >> y;
-	if (k-x < l && k+y > r) {
-		cout << "No\n";
-		return 0;
-	}
-	if (x == y) {
-		cout << "Yes\n";
-	}
-	else if (y < x) {
-		ll num = 0;
-		if (k+y > r) {
-			k -= x;
-			num = 1;
+	int T; cin >> T;
+
+	while (T--) {
+		ll n; cin >> n;
+		ll t[n], x[n];
+		for (int i = 0; i < n; i++) {
+			cin >> t[i] >> x[i];
 		}
-		num += (k-l)/(x-y);
-		if (t > num) cout << "No\n";
-		else cout << "Yes\n";
-	}
-	else {
-		if (x+y <= r-l+1) cout << "Yes\n";
-		else {
-			ll num = 0;
-			ll jp = r-y;
-			ll times = y/x;
-			ll rem = y%x;
-			if (k+y > r) {
-				num = (k-l)/x;
-				k -= num * x;
-			}
-			if (k+y <= r) {
-				if (rem) {
-					ll ini = (jp-k)/rem;
-					num += ini*times;
-					k += ini*rem;
-					if (k + rem - x < l) num += times;
-					else num += (k+rem - (l+x))/(x-rem)*(times+1) + times;
+
+		ll ans = 0;
+		ll pos = 0, prev = 0;
+		ll stp = 0;
+		ll last = 0;
+		for (int i = 0; i < n; i++) {
+			if (stp <= t[i]) {
+				last = t[i];
+				stp = abs(pos-x[i]) + t[i];
+				if (i < n-1) {
+					if (t[i+1]-t[i] >= abs(pos-x[i])) ans++;
 				}
-				else t = -1;
+				else ans++;
+				prev = pos;
+				pos = x[i];
 			}
-			cout << num << endl;
-			if (num >= t) cout << "Yes\n";
-			else cout << "No\n";
+			else {
+				ll sn = (pos > prev) ? 1 : -1;
+				ll cur = sn*(t[i]-last) + prev;
+				ll nxt;
+				if (i < n-1) nxt = min(t[i+1]-t[i], abs(pos-cur))*sn + cur;
+				else nxt = pos;
+				ll a = min(cur, nxt);
+				ll b = max(cur, nxt);
+				if (a <= x[i] && x[i] <= b) ans++;
+			}
 		}
+		cout << ans << endl;
 	}
 	
 }

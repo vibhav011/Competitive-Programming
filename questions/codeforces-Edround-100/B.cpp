@@ -88,53 +88,44 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 	return c;
 }
 
+ll lg(ll n) {
+	ll ans = -1;
+	while (n) {
+		ans++;
+		n >>= 1;
+	}
+	return ans;
+}
+
 int main () {
 	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
-	ll k, l, r, t, x, y;
-	cin >> k >> l >> r >> t >> x >> y;
-	if (k-x < l && k+y > r) {
-		cout << "No\n";
-		return 0;
-	}
-	if (x == y) {
-		cout << "Yes\n";
-	}
-	else if (y < x) {
-		ll num = 0;
-		if (k+y > r) {
-			k -= x;
-			num = 1;
+	int t; cin >> t;
+
+	while (t--) {
+		ll n; cin >> n;
+		ll a[n];
+		ll sm = 0;
+		for (int i = 0; i < n; i++) {
+			cin >> a[i];
+			// sm += a[i];
 		}
-		num += (k-l)/(x-y);
-		if (t > num) cout << "No\n";
-		else cout << "Yes\n";
-	}
-	else {
-		if (x+y <= r-l+1) cout << "Yes\n";
-		else {
-			ll num = 0;
-			ll jp = r-y;
-			ll times = y/x;
-			ll rem = y%x;
-			if (k+y > r) {
-				num = (k-l)/x;
-				k -= num * x;
-			}
-			if (k+y <= r) {
-				if (rem) {
-					ll ini = (jp-k)/rem;
-					num += ini*times;
-					k += ini*rem;
-					if (k + rem - x < l) num += times;
-					else num += (k+rem - (l+x))/(x-rem)*(times+1) + times;
-				}
-				else t = -1;
-			}
-			cout << num << endl;
-			if (num >= t) cout << "Yes\n";
-			else cout << "No\n";
+		// ll x = sm/n;
+
+		// ll ch = 0;
+		// for (int i = 0; i < n; i++) {
+		// 	ch += (a[i]%x == 0 || x%a[i] == 0) ? 0 : abs(a[i]-x);
+		// }
+		// if (2*ch > sm) x++;
+
+		for (int i = 0; i < n; i++) {
+			ll p = lg(a[i]);
+			cout << (1LL << p) << ' ';
+			// if (a[i]%x == 0 || x%a[i] == 0) cout << a[i] << ' ';
+			// else cout << x << ' ';
 		}
+		cout << endl;
+
 	}
 	
 }

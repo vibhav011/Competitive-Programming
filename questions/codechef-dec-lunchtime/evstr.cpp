@@ -91,50 +91,69 @@ int bsh(int val, int ar[], int n) {		// return ind such that val >= ar[ind] and 
 int main () {
 	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
-	ll k, l, r, t, x, y;
-	cin >> k >> l >> r >> t >> x >> y;
-	if (k-x < l && k+y > r) {
-		cout << "No\n";
-		return 0;
-	}
-	if (x == y) {
-		cout << "Yes\n";
-	}
-	else if (y < x) {
-		ll num = 0;
-		if (k+y > r) {
-			k -= x;
-			num = 1;
+	int t; cin >> t;
+
+	while (t--) {
+		int n; cin >> n;
+		int a[n];
+		for (int i = 0; i < n; i++) cin >> a[i];
+		if (n == 1) {
+			cout << "1\n";
+			continue;
 		}
-		num += (k-l)/(x-y);
-		if (t > num) cout << "No\n";
-		else cout << "Yes\n";
-	}
-	else {
-		if (x+y <= r-l+1) cout << "Yes\n";
-		else {
-			ll num = 0;
-			ll jp = r-y;
-			ll times = y/x;
-			ll rem = y%x;
-			if (k+y > r) {
-				num = (k-l)/x;
-				k -= num * x;
+		int cur = a[0];
+		int cnt = 1;
+		int ans = 0;
+		vector<pii> freq;
+		for (int i = 1; i < n; i++) {
+			if (cur == a[i]) cnt++;
+			else {
+				freq.pb(mp(cnt, cur));
+				cnt = 1;
+				cur = a[i]; 
 			}
-			if (k+y <= r) {
-				if (rem) {
-					ll ini = (jp-k)/rem;
-					num += ini*times;
-					k += ini*rem;
-					if (k + rem - x < l) num += times;
-					else num += (k+rem - (l+x))/(x-rem)*(times+1) + times;
+		}
+		freq.pb(mp(cnt, a[n-1]));
+		int m = freq.size();
+		freq.pb(mp(0, 0)); freq.pb(mp(0, 0));
+
+		if (m == 1) {
+			if (freq[0].ff&1) cout << "1\n";
+			else cout << "0\n";
+			continue;
+		}
+		if (m == 2) {
+			cout << (freq[0].ff&1) + (freq[1].ff&1) << endl;
+			continue;
+		}
+		// for (int i = 0; i < m; i++) cout << freq[i].ff << ' ';
+		// cout << endl;
+		int last = -1;
+		int ev = 0;
+		for (int i = 0; i < m; i++) {
+			if (freq[i].ff&1) {
+				ans++;
+				// if (i < m-2 && freq[i+1].ff == 1 && (freq[i+2].ff&1) && freq[i+2].ss == freq[i].ss) {
+				// 	// cout << "Hi: " << i << endl;
+				// 	i += 2;
+				// }
+				if (ev) {
+					ev = 0;
+					last = freq[i].ss;
+					continue;
 				}
-				else t = -1;
+				if (last == -1) {
+					last = freq[i].ss;
+					continue;
+				}
+				if (last == freq[i].ss) {
+					ans -= 2;
+					last = -1;
+				}
 			}
-			cout << num << endl;
-			if (num >= t) cout << "Yes\n";
-			else cout << "No\n";
+			else ev = 1;
 		}
+		cout << ans << endl;
 	}
 	
 }
