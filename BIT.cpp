@@ -43,7 +43,7 @@ public:
 };
 
 int main() {
-	int ar[6] = {5, 1, 7, 3, -4, 6};
+	int ar[6] = {5, 1, -7, 3, -4, 6};
 	BIT b(ar, 6);
 	b.changeElem(4, 4);
 	for (int i=0; i < 6; i++) cout << b.getSum(i) << endl;
